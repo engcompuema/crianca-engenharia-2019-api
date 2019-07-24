@@ -13,19 +13,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import br.uema.criancaengenharia.entity.Voluntario;
-import br.uema.criancaengenharia.repository.VoluntarioRepository;
-import br.uema.criancaengenharia.service.VoluntarioService;
+import br.uema.criancaengenharia.entity.Inscritos;
+import br.uema.criancaengenharia.repository.InscritosRepository;
+import br.uema.criancaengenharia.service.InscritosService;
 
 @Service
-public class VoluntarioServiceImpl implements VoluntarioService {
+public class InscritosServiceImpl implements InscritosService {
 	
 	@Autowired
-	private VoluntarioRepository repository;
+	private InscritosRepository repository;
 
 	@Override
-	public Voluntario createOrUpdate(Voluntario voluntario) {
-		return repository.save(voluntario);
+	public Inscritos createOrUpdate(Inscritos inscritos) {
+		return repository.save(inscritos);
 	}
 	
 	@Override
@@ -43,12 +43,14 @@ public class VoluntarioServiceImpl implements VoluntarioService {
 					// IGNORAR A PRIMEIRA LINHA
 					if (row.getRowNum() != 0) {
 
-						Voluntario voluntario = new Voluntario();
-						voluntario.setNome(dataFormatter.formatCellValue(row.getCell(0)));
-						voluntario.setCpf(dataFormatter.formatCellValue(row.getCell(1)));
-						voluntario.setEmail(dataFormatter.formatCellValue(row.getCell(2)));
-						voluntario.setEmailEnviado(false);
-						createOrUpdate(voluntario);
+						Inscritos inscritos = new Inscritos();
+						inscritos.setNome(dataFormatter.formatCellValue(row.getCell(0)));
+						inscritos.setCpf(dataFormatter.formatCellValue(row.getCell(1)));
+						inscritos.setEmail(dataFormatter.formatCellValue(row.getCell(2)));
+						inscritos.setFuncao(dataFormatter.formatCellValue(row.getCell(3)));
+						inscritos.setTipoAtividade(dataFormatter.formatCellValue(row.getCell(4)));
+						inscritos.setEmailEnviado(false);
+						createOrUpdate(inscritos);
 					}
 				}
 
@@ -59,7 +61,7 @@ public class VoluntarioServiceImpl implements VoluntarioService {
 	}
 
 	@Override
-	public Page<Voluntario> findAll(Pageable pageRequest) {
+	public Page<Inscritos> findAll(Pageable pageRequest) {
 		return repository.findAll(pageRequest);
 	}
 	

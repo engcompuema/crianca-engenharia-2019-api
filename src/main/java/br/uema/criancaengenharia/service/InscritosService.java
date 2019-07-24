@@ -5,13 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
-import br.uema.criancaengenharia.entity.Monitor;
+import br.uema.criancaengenharia.entity.Inscritos;
 
-public interface MonitorService {
+public interface InscritosService {
 	
-	Monitor createOrUpdate(Monitor monitor);
+	Inscritos createOrUpdate(Inscritos inscritos);
 
-	Page<Monitor> findAll(Pageable pageRequest);
+	Page<Inscritos> findAll(Pageable pageRequest);
 	
 	void importData(MultipartFile file);
 
