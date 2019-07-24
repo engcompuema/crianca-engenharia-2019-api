@@ -15,17 +15,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import br.uema.criancaengenharia.entity.Voluntario;
-import br.uema.criancaengenharia.service.VoluntarioService;
+import br.uema.criancaengenharia.entity.Monitor;
+import br.uema.criancaengenharia.service.MonitorService;
 import br.uema.dto.Response;
 
 @RestController
-@RequestMapping("/api/voluntario")
+@RequestMapping("/api/monitor")
 @CrossOrigin(origins = "*")
-public class VoluntarioResource {
+public class MonitorResource {
 
 	@Autowired
-	private VoluntarioService service;
+	private MonitorService service;
 
 	@PostMapping(consumes = "multipart/form-data")
 	public ResponseEntity<Response<String>> importData(@RequestParam("file") MultipartFile file) {
@@ -40,18 +40,19 @@ public class VoluntarioResource {
 		}
 	}
 
+	
 	@GetMapping(value="{page}/{count}")
-	public ResponseEntity<Response<Page<Voluntario>>> findAll(
+	public ResponseEntity<Response<Page<Monitor>>> findAll(
 			@PathVariable int page, 
 			@PathVariable int count,
 			@RequestHeader(value = "Authorization", required = false) String authorization) {
 		
-		Response<Page<Voluntario>> response = new Response<>();
+		Response<Page<Monitor>> response = new Response<>();
 		
 		Pageable pageable = PageRequest.of(page, count);
 		
-		Page<Voluntario> voluntarios = service.findAll(pageable);
-		response.setData(voluntarios);
+		Page<Monitor> Monitores = service.findAll(pageable);
+		response.setData(Monitores);
 		return ResponseEntity.ok(response);
 	}
 }
