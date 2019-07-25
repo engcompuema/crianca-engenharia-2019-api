@@ -1,6 +1,7 @@
 package br.uema.criancaengenharia.service.impl;
 
 import java.util.Iterator;
+import java.util.Optional;
 
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
@@ -63,6 +64,14 @@ public class InscritosServiceImpl implements InscritosService {
 	@Override
 	public Page<Inscritos> findAll(Pageable pageRequest) {
 		return repository.findAll(pageRequest);
+	}
+
+	@Override
+	public void enviarConfirmacao(Long id) {
+		Optional<Inscritos> i = repository.findById(id);	
+		if(i.isPresent()) {
+			i.get();
+		}
 	}
 	
 

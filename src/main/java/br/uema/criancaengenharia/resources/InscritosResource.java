@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import br.uema.criancaengenharia.entity.Inscritos;
 import br.uema.criancaengenharia.service.InscritosService;
+import br.uema.criancaengenharia.service.impl.MailService;
 import br.uema.dto.Response;
 
 @RestController
@@ -26,6 +27,9 @@ public class InscritosResource {
 
 	@Autowired
 	private InscritosService service;
+	
+	@Autowired
+	private MailService mailService;
 
 	@PostMapping(consumes = "multipart/form-data")
 	public ResponseEntity<Response<String>> importData(@RequestParam("file") MultipartFile file) {
@@ -39,20 +43,38 @@ public class InscritosResource {
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
+	
+	/*
+	 * @GetMapping public String teste() { System.out.println("Chegou no teste");
+	 * try{ this.mailService.enviar("lucas.ferreira@seati.ma.gov.br"); }catch
+	 * (Exception e) { e.printStackTrace(); } System.out.println("Chegou aqui");
+	 * return "SUCESSO"; }
+	 */
 
 	
 	@GetMapping(value="{page}/{count}")
 	public ResponseEntity<Response<Page<Inscritos>>> findAll(
 			@PathVariable int page, 
-			@PathVariable int count,
-			@RequestHeader(value = "Authorization", required = false) String authorization) {
+			@PathVariable int count) {
 		
 		Response<Page<Inscritos>> response = new Response<>();
 		
 		Pageable pageable = PageRequest.of(page, count);
 		
-		Page<Inscritos> Inscritoses = service.findAll(pageable);
-		response.setData(Inscritoses);
+		Page<Inscritos> inscritos = service.findAll(pageable);
+		response.setData(inscritos);
 		return ResponseEntity.ok(response);
 	}
+	
+	/*
+	 * @PostMapping("{id}/enviar") public ResponseEntity<Response<String>>
+	 * enviarConfirmaçãoById(@PathVariable Long id){ Response<String> response = new
+	 * Response<>();
+	 * 
+	 * try { service.enviarConfirmacao(id); }catch(Exception e) {
+	 * 
+	 * }
+	 * 
+	 * }
+	 */
 }

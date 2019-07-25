@@ -15,4 +15,6 @@ public interface InscritosService {
 	
 	void importData(MultipartFile file);
 
+	void enviarConfirmacao(Long id);
+
 }

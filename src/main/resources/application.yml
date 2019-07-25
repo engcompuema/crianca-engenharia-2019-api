@@ -23,12 +23,12 @@ spring:
     password: postgres
     driver-class-name: org.postgresql.Driver
   
-  #mail:
-   # host: email.ma.gov.br
-   # port: 587
-   # username: naoresponda@seati.ma.gov.br
-   # password: n@0r3sp0nd@ 
-    
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: engenhariacrianca@gmail.com
+    password: Criancaengenharia
+        
   jackson:
     serialization:
       FAIL_ON_EMPTY_BEANS: false
