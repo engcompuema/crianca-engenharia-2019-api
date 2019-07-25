@@ -27,45 +27,54 @@ public class InscritosResource {
 
 	@Autowired
 	private InscritosService service;
-	
+
 	@Autowired
 	private MailService mailService;
 
 	@PostMapping(consumes = "multipart/form-data")
 	public ResponseEntity<Response<String>> importData(@RequestParam("file") MultipartFile file) {
 		Response<String> response = new Response<>();
-		try{
+		try {
 			service.importData(file);
 			response.setData("Importação Realizada com Sucesso");
 			return ResponseEntity.ok().body(response);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			response.addError("Ocorreu um Erro");
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
-	
-	/*
-	 * @GetMapping public String teste() { System.out.println("Chegou no teste");
-	 * try{ this.mailService.enviar("lucas.ferreira@seati.ma.gov.br"); }catch
-	 * (Exception e) { e.printStackTrace(); } System.out.println("Chegou aqui");
-	 * return "SUCESSO"; }
-	 */
 
-	
-	@GetMapping(value="{page}/{count}")
-	public ResponseEntity<Response<Page<Inscritos>>> findAll(
-			@PathVariable int page, 
-			@PathVariable int count) {
-		
+	@PostMapping("{id}/sendConfirmacao")
+	public ResponseEntity<Response<String>> sendConfirmacao(@PathVariable("id") Long id) {
+		Response<String> response = new Response<>();
+		try {
+			if(this.mailService.enviar(id)) {
+				response.setData("E-mail Enviado Com Sucesso!");
+				return ResponseEntity.ok().body(response);
+			}else {
+				response.setData("Erro ao enviar o Email.");
+				return ResponseEntity.badRequest().body(response);
+			}
+			//this.mailService.enviar("luanfelcomp@gmail.com");
+			
+		} catch (Exception e) {
+			response.setData("Erro ao enviar o Email.");
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
+
+	@GetMapping(value = "{page}/{count}")
+	public ResponseEntity<Response<Page<Inscritos>>> findAll(@PathVariable int page, @PathVariable int count) {
+
 		Response<Page<Inscritos>> response = new Response<>();
-		
+
 		Pageable pageable = PageRequest.of(page, count);
-		
+
 		Page<Inscritos> inscritos = service.findAll(pageable);
 		response.setData(inscritos);
 		return ResponseEntity.ok(response);
 	}
-	
+
 	/*
 	 * @PostMapping("{id}/enviar") public ResponseEntity<Response<String>>
 	 * enviarConfirmaçãoById(@PathVariable Long id){ Response<String> response = new

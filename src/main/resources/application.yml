@@ -24,10 +24,20 @@ spring:
     driver-class-name: org.postgresql.Driver
   
   mail:
+    test-connection: true
     host: smtp.gmail.com
     port: 587
     username: engenhariacrianca@gmail.com
     password: Criancaengenharia
+    properties:
+      mail:
+        smtp:
+          auth: true
+        starttls:
+          enable: true
+          required: true
+        ssl:
+          enable: true
         
   jackson:
     serialization:
