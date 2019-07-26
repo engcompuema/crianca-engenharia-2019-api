@@ -1,5 +1,7 @@
 package br.uema.criancaengenharia.resources;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,7 +11,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -62,6 +63,19 @@ public class InscritosResource {
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
+	
+	@PostMapping("{id}/checkin")
+	public ResponseEntity<Response<String>> doCheckin(@PathVariable("id") Long id) {
+		Response<String> response = new Response<>();
+		try {
+			service.doCheckin(id);
+			response.setData("Checkin realizado com Sucesso");
+			return ResponseEntity.ok().body(response);
+		} catch (Exception e) {
+			response.setData("Erro ao realizar o checkin.");
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
 
 	@GetMapping(value = "{page}/{count}")
 	public ResponseEntity<Response<Page<Inscritos>>> findAll(@PathVariable int page, @PathVariable int count) {
@@ -73,6 +87,35 @@ public class InscritosResource {
 		Page<Inscritos> inscritos = service.findAll(pageable);
 		response.setData(inscritos);
 		return ResponseEntity.ok(response);
+	}
+	
+	@GetMapping(value = "presentes/{page}/{count}")
+	public ResponseEntity<Response<Page<Inscritos>>> findAllPresentes(@PathVariable int page, @PathVariable int count) {
+
+		Response<Page<Inscritos>> response = new Response<>();
+
+		Pageable pageable = PageRequest.of(page, count);
+
+		Page<Inscritos> inscritos = service.findAllPresentes(pageable);
+		response.setData(inscritos);
+		return ResponseEntity.ok(response);
+	}
+	
+
+	@GetMapping(value = "{cpf}/buscar")
+	public ResponseEntity<Response<Inscritos>> findByCpf(@PathVariable ("cpf") String cpf) {
+
+		Response<Inscritos> response = new Response<>();
+
+		Optional<Inscritos> inscrito = service.findByCpf(cpf);
+		if(inscrito.isPresent()) {
+			response.setData(inscrito.get());
+			return ResponseEntity.ok(response);
+		}else {
+			response.addError("CPF Não cadastrado");
+			return ResponseEntity.badRequest().body(response);
+		}
+	
 	}
 
 	/*

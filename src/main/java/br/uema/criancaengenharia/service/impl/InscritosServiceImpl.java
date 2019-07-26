@@ -1,5 +1,6 @@
 package br.uema.criancaengenharia.service.impl;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Optional;
 
@@ -72,6 +73,24 @@ public class InscritosServiceImpl implements InscritosService {
 		if(i.isPresent()) {
 			i.get();
 		}
+	}
+
+	@Override
+	public Page<Inscritos> findAllPresentes(Pageable pageRequest) {
+		return repository.findAllByCheckinNotNull(pageRequest);
+	}
+
+	@Override
+	public Optional<Inscritos> findByCpf(String cpf) {
+		return repository.findByCpf(cpf);
+	}
+
+	@Override
+	public Inscritos doCheckin(Long id) {
+		Inscritos i = repository.findById(id).get();
+		i.setCheckin(new Date());
+		return repository.save(i);
+		
 	}
 	
 
