@@ -1,6 +1,7 @@
 package br.uema.criancaengenharia.service;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -19,10 +20,10 @@ public interface InscritosService {
 	
 	void importData(MultipartFile file);
 
-	void enviarConfirmacao(Long id);
-
 	Optional<Inscritos> findByCpf(String cpf);
 
 	Inscritos doCheckin(Long id);
+
+	Page<Inscritos> findByParameters(int page, int size, boolean email_enviado, List<String> sort);
 
 }

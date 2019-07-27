@@ -1,5 +1,6 @@
 package br.uema.criancaengenharia.resources;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.uema.criancaengenharia.entity.Inscritos;
+import br.uema.criancaengenharia.repository.InscritosRepository;
 import br.uema.criancaengenharia.service.InscritosService;
 import br.uema.criancaengenharia.service.impl.MailService;
 import br.uema.dto.Response;
@@ -31,6 +33,9 @@ public class InscritosResource {
 
 	@Autowired
 	private MailService mailService;
+	
+	@Autowired
+	private InscritosRepository repository;
 
 	@PostMapping(consumes = "multipart/form-data")
 	public ResponseEntity<Response<String>> importData(@RequestParam("file") MultipartFile file) {
@@ -89,6 +94,14 @@ public class InscritosResource {
 		return ResponseEntity.ok(response);
 	}
 	
+	@GetMapping
+	public ResponseEntity<Response<List<Inscritos>>> getAll() {
+
+		Response<List<Inscritos>> response = new Response<>();
+		response.setData(repository.findAll());		
+		return ResponseEntity.ok(response);
+	}
+	
 	@GetMapping(value = "presentes/{page}/{count}")
 	public ResponseEntity<Response<Page<Inscritos>>> findAllPresentes(@PathVariable int page, @PathVariable int count) {
 
@@ -116,6 +129,24 @@ public class InscritosResource {
 			return ResponseEntity.badRequest().body(response);
 		}
 	
+	}
+	
+	@GetMapping("{page}/{count}/parameters")
+	ResponseEntity<Response<Page<Inscritos>>> findByParameters(@PathVariable int page, @PathVariable int count,
+			@RequestParam(name = "emailEnviado", required = false, defaultValue = "") String emailEnviado,		
+			@RequestParam(name = "sort", required = false, defaultValue = "email!asc") List<String> sort) {
+		
+		Response<Page<Inscritos>> response = new Response<>();
+		Page<Inscritos> inscritos;
+		if(emailEnviado.isEmpty()) {
+			Pageable pageable = PageRequest.of(page, count);
+			inscritos = service.findAll(pageable);
+		}else {
+			inscritos = service.findByParameters(page, count, Boolean.valueOf(emailEnviado), sort);
+		}
+		
+		response.setData(inscritos);
+		return ResponseEntity.ok(response);
 	}
 
 	/*

@@ -14,4 +14,6 @@ public interface InscritosRepository extends JpaRepository<Inscritos, Long> {
 
 	Page<Inscritos> findAllByCheckinNotNull(Pageable pageable);
 
+	Page<Inscritos> findByEmailEnviado(boolean email_enviado, Pageable pageable);
+
 }

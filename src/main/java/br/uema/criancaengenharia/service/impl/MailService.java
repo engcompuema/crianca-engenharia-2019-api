@@ -178,7 +178,7 @@ public class MailService {
 			helper.setTo(i.getEmail());
 			helper.setSubject("Teste Envio de Email");
 			helper.setText(emailHTML, true);
-			helper.addAttachment("Confirmação.pdf", gerarConfirmacao());
+			helper.addAttachment("Confirmação.pdf", gerarConfirmacao(i));
 
 			mailSender.send(mime);
 
@@ -207,18 +207,18 @@ public class MailService {
 		}
 	}
 
-	public DataSource gerarConfirmacao() {
+	public DataSource gerarConfirmacao(Inscritos i) {
 
 		Map<String, Object> params = new HashMap<>();
-		params.put("aluno_nome", "");
-		params.put("aluno_cpf", "");
+		params.put("aluno_nome", i.getNome());
+		params.put("aluno_cpf", i.getCpf());
 		params.put("aluno_curso", "");
 		params.put("aluno_centro", "");
 		params.put("aluno_turno", "");
-		params.put("aluno_funcao", "");
+		params.put("aluno_funcao", i.getTipoAtividade());
 		params.put("aluno_instituicao", "");
-		params.put("aluno_email", "");
-		params.put("qr_image", generateQR("12312312312"));
+		params.put("aluno_email", i.getEmail());
+		params.put("qr_image", generateQR(i.getCpf()));
 		String jrxml = "src\\main\\java\\relatorios\\Confirmacao.jasper";
 		DataSource aAttachment = null;
 		try {

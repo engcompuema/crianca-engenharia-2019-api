@@ -1,7 +1,9 @@
 package br.uema.criancaengenharia.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.poi.ss.usermodel.DataFormatter;
@@ -11,7 +13,10 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -67,13 +72,7 @@ public class InscritosServiceImpl implements InscritosService {
 		return repository.findAll(pageRequest);
 	}
 
-	@Override
-	public void enviarConfirmacao(Long id) {
-		Optional<Inscritos> i = repository.findById(id);	
-		if(i.isPresent()) {
-			i.get();
-		}
-	}
+
 
 	@Override
 	public Page<Inscritos> findAllPresentes(Pageable pageRequest) {
@@ -91,6 +90,28 @@ public class InscritosServiceImpl implements InscritosService {
 		i.setCheckin(new Date());
 		return repository.save(i);
 		
+	}
+
+	@Override
+	public Page<Inscritos> findByParameters(int page, int size, boolean email_enviado, List<String> sort) {
+		List<Sort.Order> orders = new ArrayList<>();
+		for (String order: sort) {
+            String[] orderSplit = order.split("!");
+            String property = orderSplit[0];
+            
+            if (orderSplit.length == 1) {
+                orders.add(new Sort.Order(Direction.ASC, property));
+            } else {
+                Sort.Direction direction
+                        = Sort.Direction.fromString(orderSplit[1]);
+                orders.add(new Sort.Order(direction, property));
+            }
+        }
+		
+		Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
+		
+
+		return repository.findByEmailEnviado(email_enviado, pageable);
 	}
 	
 
