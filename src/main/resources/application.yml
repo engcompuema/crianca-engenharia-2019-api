@@ -1,5 +1,9 @@
 spring:
-  
+  server:
+      port: 8080
+      servlet:
+          path: /*
+          
   servlet:
     multipart:
       enabled: true
@@ -18,7 +22,7 @@ spring:
         temp:
           use_jdbc_metadata_defaults: false
   datasource:
-    url: jdbc:postgresql://localhost:5432/crianca-engenharia-2019
+    url: jdbc:postgresql://192.168.0.25:5432/crianca-engenharia-2019
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver

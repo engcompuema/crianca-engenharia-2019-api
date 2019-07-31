@@ -13,6 +13,7 @@
 	<artifactId>crianca-engenharia-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>crianca-engenharia-api</name>
+	<packaging>war</packaging>
 	<description>API para o Crianca Engenharia 2019</description>
 
 	<properties>
@@ -49,6 +50,16 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+			<!-- <exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions> -->
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
 		</dependency>
 
 		<dependency>

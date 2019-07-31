@@ -7,15 +7,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.imageio.ImageIO;
-import javax.mail.BodyPart;
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
 
